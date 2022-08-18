@@ -9,7 +9,7 @@ import psycopg2.extras as pg_extra
 
 class Connector:
     def __init__(self, secret=None, region=None,
-                 creds=None, autocommit=False):
+                 creds=None, autocommit=False, schema=None):
         """
         Base constructor of the Connector class
         :param secret: AWS secret name that stores the credentials to connect
@@ -31,10 +31,16 @@ class Connector:
         user = self.credentials['username']
         pwd = self.credentials['password']
         db = self.credentials['dbname']
-        self.conn = psycopg2.connect(
-            host=host, port=port,
-            database=db, user=user, password=pwd
-        )
+        if schema:
+            self.conn = psycopg2.connect(
+                host=host, port=port, database=db,
+                user=user, password=pwd, options=f"-c search_path={schema}"
+            )
+        else:
+            self.conn = psycopg2.connect(
+                host=host, port=port, database=db,
+                user=user, password=pwd
+            )
         self.conn.autocommit = autocommit
         self.cursor = self.conn.cursor()
 
