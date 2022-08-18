@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timezone
 
 from connector import Connector
@@ -87,7 +88,8 @@ def lambda_handler(event, context):
     method = resource.split("/")[1]
     db_secret = os.environ["db_secret"]
     db_region = os.environ["db_region"]
-    db = Connector(db_secret, db_region, autocommit=True)
+    db_schema = os.environ['stage'] if os.environ['stage'] else 'dev'
+    db = Connector(db_secret, db_region, autocommit=True, schema=db_schema)
     print(taskType, method)
     try:
         if event:

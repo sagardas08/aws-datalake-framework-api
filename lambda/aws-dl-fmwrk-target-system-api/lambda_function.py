@@ -103,7 +103,8 @@ def lambda_handler(event, context):
     db_secret = os.environ['db_secret']
     rs_secret = os.environ['rs_secret']
     region = os.environ['region']
-    metadata_conn = Connector(db_secret, region, autocommit=True)
+    db_schema = os.environ['stage'] if os.environ['stage'] else 'dev'
+    metadata_conn = Connector(db_secret, region, autocommit=True, schema=db_schema)
     if "rs_load_ind" in event["body-json"]["target_config"]:
         if event["body-json"]["target_config"]["rs_load_ind"]:
             redshift_conn = RedshiftConnector(
