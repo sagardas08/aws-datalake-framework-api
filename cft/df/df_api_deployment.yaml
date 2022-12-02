@@ -38,9 +38,6 @@ Resources:
       Layers:
         - !Ref LambdaLayer
       Timeout: 10
-      FileSystemConfigs:
-        - Arn: arn:aws:elasticfilesystem:us-east-2:315119964270:access-point/fsap-0994f833b81d0920b
-          LocalMountPath: /mnt/dags
       VpcConfig:
         SecurityGroupIds:
           - sg-007fcde876fd52f62
